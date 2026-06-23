@@ -1,0 +1,2398 @@
+SNOWFLAKE
+
+# Loading Data into Tables-
+
+How to import data into Snowflake tables;
+
+Data can come from:
+
+CSV files
+JSON files
+Cloud storage
+Other databases
+
+
+# Advanced Data Loading -
+
+Copy Options
+
+Snowflake uses the COPY INTO command to load data.
+
+COPY INTO customers
+FROM @my_stage;
+
+
+# Different Data Types;
+
+You'll work with:
+
+Data Type	Example
+INTEGER	         100
+VARCHAR       	"Roohi"
+DATE	         2026-06-17
+BOOLEAN	         TRUE
+FLOAT	         45.78
+
+Understanding data types is very important for storing data correctly.
+
+
+# Performance and Cost Optimization;
+
+One of Snowflake's biggest advantages is performance.
+
+You'll learn:
+
+Performance
+
+How to make queries run faster.
+
+Example:
+
+Instead of a query taking:
+
+20 seconds
+
+you might optimize it to:
+
+2 seconds
+
+# Cost Optimization
+
+Snowflake charges based on resource usage.
+
+You'll learn:
+
+How costs are generated
+How to reduce unnecessary spending
+Best practices for efficient usage
+
+
+# Cloud Providers;
+
+Snowflake works with major cloud platforms.
+
+Three Major Providers-
+
+Amazon Web Services (AWS)
+Microsoft Azure
+Google Cloud Platform (GCP)
+
+
+Why Important?
+
+Most organizations store data on these cloud platforms.
+
+Example:
+
+AWS S3
+    ↓
+Snowflake
+    ↓
+Reports & Analytics
+
+You'll learn how Snowflake connects with them.
+
+
+# Advanced Snowflake Features
+
+After learning the basics, you'll move to professional-level features.
+
+Time Travel;
+
+Allows you to access previous versions of data.
+
+Example:
+
+Today:
+Customer Name = Roohi
+
+Yesterday:
+Customer Name = Rohini
+
+Time Travel lets you see the old version.
+
+
+Fail-safe
+
+A recovery feature for data protection.
+
+Purpose:
+
+Prevent permanent data loss
+Additional backup protection
+Data Sharing
+
+Share data without copying it.
+
+Example:
+
+Company A shares data directly with Company B.
+
+No file transfers needed.
+
+
+Data Sampling
+
+Used when working with huge datasets.
+
+Instead of analyzing:
+
+10 million rows
+
+You can analyze:
+
+100,000 sample rows
+
+to test queries faster.
+
+
+Streams
+
+Tracks changes in tables.
+
+Example:
+
+New records added
+Rows updated
+Rows deleted
+
+Streams can capture these changes.
+
+
+
+Tasks
+
+Automate jobs in Snowflake.
+
+Example:
+
+Run every day at 2 AM
+Load sales data automatically
+
+Similar to scheduling jobs.
+
+
+# Working with Snowflake in Organizations;
+
+In real companies, many people use Snowflake.
+
+You'll learn:
+
+Access Management
+
+Control who can access what.
+
+Example:
+
+User	         Access
+Analyst	         Read
+Engineer	 Read + Write
+Admin	         Full Access
+
+Roles-
+Roles simplify permission management.
+
+Examples:
+
+ACCOUNTADMIN
+SYSADMIN
+SECURITYADMIN
+ANALYST
+
+Roles define what actions users can perform.
+
+
+# Connecting Snowflake with Other Tools
+
+Snowflake rarely works alone.
+
+You'll learn how it connects with tools like:
+
+Python
+Power BI
+Tableau
+ETL Tools
+Data Pipelines
+
+Example:
+
+Snowflake
+      ↓
+Power BI Dashboard
+
+Business users can then see reports and insights.
+
+
+
+FLOWCHART:-
+
+Welcome
+   ↓
+Snowflake Basics
+   ↓
+Architecture & Fundamentals
+   ↓
+Data Loading
+   ↓
+Advanced Loading
+   ↓
+Performance & Cost Optimization
+   ↓
+Cloud Providers (AWS, Azure, GCP)
+   ↓
+Advanced Features
+(Time Travel, Fail-safe, Streams, Tasks)
+   ↓
+Access Management & Roles
+   ↓
+Tool Integrations
+   ↓
+Best Practices
+
+
+
+# Some of the imp key points in SNOWFLAKE:-
+
+Auto Resume
+
+The instructor mentions:
+
+Auto Resume
+
+Meaning:
+
+If the warehouse is stopped (suspended),
+
+and you run:
+
+SELECT * FROM students;
+
+Snowflake automatically starts it.
+
+
+Warehouse Stopped
+        ↓
+Run Query
+        ↓
+Warehouse Starts Automatically
+        ↓
+Query Executes
+
+
+
+# Snowflake AI:-
+
+The instructor presses:
+
+Ctrl + I
+
+This opens AI assistance.
+
+You can type:
+
+Show top 100 customers
+
+and Snowflake AI generates SQL automatically.
+
+Example:
+
+You write:
+
+Show first 10 rows from students
+
+AI generates:
+
+SELECT *
+FROM students
+LIMIT 10;
+
+
+# Running Queries:-
+
+Run Selected Query
+
+Shortcut:
+
+Ctrl + Enter
+
+Example:
+
+SELECT * FROM students;
+
+Press:
+
+Ctrl + Enter
+
+Result appears below.
+
+
+Run Entire File
+
+Shortcut:
+
+Ctrl + Shift + Enter
+
+Runs all SQL in the file.
+
+
+# What is Snowflake Architecture?
+
+Snowflake is built using 3 layers:
+
+
+Cloud Services Layer
+        ↑
+Query Processing Layer
+        ↑
+Storage Layer
+
+
+1. Storage Layer (Stores Data)
+
+This is where your actual data is saved.
+
+Example:
+
+Students      Table
+ID	      Name
+1	      Roohi
+2	      Rahul
+
+This data is stored in the cloud.
+
+Since your Snowflake account uses AWS:
+
+Snowflake
+    ↓
+AWS S3
+
+Snowflake stores data behind the scenes in AWS S3 buckets.
+
+You don't manage S3 yourself.
+
+Snowflake handles everything automatically.
+
+
+# Traditional Database vs Snowflake;
+
+Traditional Database
+
+Stores data row by row:
+
+1 | Roohi | Snowflake
+2 | Rahul | Python
+3 | Sara  | SQL
+
+Snowflake-Stores data column by column:
+
+ID
+1
+2
+3
+
+NAME
+Roohi
+Rahul
+Sara
+
+COURSE
+Snowflake
+Python
+SQL
+
+This is called:
+
+Columnar Storage
+
+Benefits:
+
+✅ Faster analytics
+
+✅ Better compression
+
+✅ Lower storage cost
+
+
+2. Query Processing Layer (The Muscle 💪)
+
+This layer executes SQL queries.
+
+Example:
+
+SELECT * FROM students;
+
+Someone has to process this query.
+
+What is a Warehouse?
+
+A Warehouse is a virtual computer.
+
+Think:
+
+SQL Query
+     ↓
+ Warehouse
+     ↓
+ Result
+
+In your account:
+
+COMPUTE_WH
+
+is your warehouse.
+
+
+Why Do We Need Warehouses?
+
+Example:
+
+SELECT * FROM students;
+
+Snowflake must:
+
+Read data
+Process query
+Return result
+
+This requires CPU and memory.
+
+Warehouse provides that computing power.
+
+
+3. Cloud Services Layer (The Brain 🧠)
+
+This layer manages everything.
+
+Responsibilities:
+
+Security
+User accounts
+Roles
+Query optimization
+Metadata
+Permissions
+
+Example:
+
+When you run:
+
+CREATE TABLE students (
+    id INTEGER
+);
+
+Cloud Services checks:
+
+Does ACCOUNTADMIN have permission?
+
+If yes:
+
+Query executes
+
+If no:
+
+Permission denied
+
+
+# Snowflake Architecture Summary
+
+Cloud Services
+   (Brain)
+       ↓
+
+Warehouses
+  (Muscle)
+       ↓
+
+Storage
+(Data)
+
+# Warehouse Sizes
+
+The instructor showed:
+
+Size	  Relative Power
+X-Small	  1x
+Small	  2x
+Medium	  4x
+Large	  8x
+X-Large	  6x
+
+Every size roughly doubles the compute resources.
+
+Example;
+
+X-Small
+
+Good for:
+
+Learning
+Small datasets
+Practice
+
+This is what you're using now.
+
+Large
+
+Good for:
+
+Millions of rows
+Complex queries
+Production workloads
+
+
+# Cost;
+
+Snowflake charges mainly for warehouse usage.
+
+Example:
+
+Warehouse Running
+      ↓
+Credits Consumed
+      ↓
+Money Charged
+
+
+If warehouse is stopped:
+
+No Compute Cost
+
+
+
+# Auto Suspend & Auto Resume;
+
+
+This saves money.
+
+
+Auto Suspend
+
+If warehouse is idle:
+
+No activity
+     ↓
+Warehouse stops
+
+Auto Resume
+
+When you run:
+
+SELECT * FROM students;
+
+Snowflake automatically starts the warehouse.
+
+You don't have to start it manually.
+
+
+
+#   Multi-Cluster Warehouse;
+
+
+Imagine 1 warehouse can process:
+
+100 queries
+
+But suddenly:
+
+1000 users send queries
+
+One warehouse becomes overloaded.
+
+Snowflake can automatically add more clusters:
+
+Warehouse 1
+Warehouse 2
+Warehouse 3
+
+This is called:
+
+Multi-Cluster Warehouse
+
+Benefit:
+
+✅ Faster performance
+
+✅ Less waiting
+
+
+
+@ if we want to add more warehouses how to do it ???
+
+Create a New Warehouse
+
+Run this in your SQL worksheet:
+
+CREATE WAREHOUSE my_wh
+WITH
+    WAREHOUSE_SIZE = 'SMALL'
+    AUTO_SUSPEND = 60
+    AUTO_RESUME = TRUE;
+
+This creates a warehouse named MY_WH
+
+
+Check All Warehouses
+
+SHOW WAREHOUSES;
+
+You will now see something like:
+
+Name
+COMPUTE_WH
+MY_WH
+
+Use the New Warehouse
+
+ USE WAREHOUSE my_wh;
+
+Check which warehouse is active:
+
+SELECT CURRENT_WAREHOUSE();
+
+Output:
+
+MY_WH
+
+
+# Create Different Sizes
+
+X-Small
+CREATE WAREHOUSE wh_xs
+WAREHOUSE_SIZE = 'XSMALL';
+
+Medium
+CREATE WAREHOUSE wh_medium
+WAREHOUSE_SIZE = 'MEDIUM';
+
+Large
+CREATE WAREHOUSE wh_large
+WAREHOUSE_SIZE = 'LARGE';
+
+
+#  See Warehouse Details
+
+SHOW WAREHOUSES;
+
+You'll see:
+
+Name
+Size
+State (Started/Suspended)
+Auto Resume
+Auto Suspend
+
+
+Suspend a Warehouse (Stop It)
+
+ALTER WAREHOUSE my_wh SUSPEND;
+
+Resume a Warehouse (Start It)
+ALTER WAREHOUSE my_wh RESUME;
+
+Real-World Example-
+
+Many companies create separate warehouses:
+
+ETL_WH         → Loading data
+REPORTING_WH   → Power BI/Tableau reports
+DEV_WH         → Developer testing
+ML_WH          → Data science workloads
+
+This prevents one team's queries from slowing down another team's work.
+
+
+# Why Create Warehouses Using SQL?
+
+
+Instead of clicking buttons in the UI:
+
+CREATE WAREHOUSE MY_WH;
+
+Benefits:
+
+✅ Reproducible
+
+✅ Easy to share with team
+
+✅ Can be stored in GitHub
+
+✅ Infrastructure as Code (IaC)
+
+✅ Common in companies
+
+
+Step 1: Select the Correct Role
+
+USE ROLE SYSADMIN;
+
+Why?
+
+Only certain roles can create warehouses.
+SYSADMIN is the recommended role.
+PUBLIC cannot create warehouses.
+
+Check current role:
+
+SELECT CURRENT_ROLE();
+
+
+Step 2: Create a Simple Warehouse
+
+CREATE WAREHOUSE FIRST_WH
+WITH
+WAREHOUSE_SIZE = 'XSMALL';
+
+This creates:
+
+Warehouse Name : FIRST_WH
+Size           : XSMALL
+Clusters       : 1
+
+
+Step 3: Create a Multi-Cluster Warehouse
+
+CREATE WAREHOUSE SECOND_WH
+WITH
+WAREHOUSE_SIZE = 'SMALL'
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 3;
+
+Meaning:
+
+Minimum Clusters = 1
+Maximum Clusters = 3
+
+
+Step 4: Auto Suspend
+
+AUTO_SUSPEND = 300
+
+Example:
+
+CREATE WAREHOUSE SECOND_WH
+WITH
+WAREHOUSE_SIZE = 'SMALL'
+AUTO_SUSPEND = 300;
+
+300 seconds = 5 minutes
+
+If nobody uses the warehouse for 5 minutes:
+
+Warehouse Running
+       ↓
+5 Minutes Idle
+       ↓
+Automatically Suspended
+
+This saves money.
+
+
+Step 5: Auto Resume
+
+AUTO_RESUME = TRUE
+
+Example:
+
+CREATE WAREHOUSE SECOND_WH
+WITH
+WAREHOUSE_SIZE = 'SMALL'
+AUTO_SUSPEND = 300
+AUTO_RESUME = TRUE;
+
+Meaning:
+
+Warehouse Suspended
+        ↓
+User Runs Query
+        ↓
+Warehouse Starts Automatically
+
+No manual action needed.
+
+
+
+Step 6: Add Comments
+
+COMMENT = 'This is our second warehouse'
+
+Example:
+
+CREATE WAREHOUSE SECOND_WH
+WITH
+WAREHOUSE_SIZE = 'SMALL'
+COMMENT = 'Warehouse for training';
+
+Useful when teams have many warehouses.
+
+
+See All Warehouses
+
+SHOW WAREHOUSES;
+
+
+
+# Managing an existing warehouse after it has been created :-
+
+
+1. Resume a Warehouse (Start It)
+
+If a warehouse is suspended:
+
+
+ALTER WAREHOUSE SECOND_WH RESUME;
+
+
+Meaning:
+
+Suspended
+    ↓
+Resume
+    ↓
+Running
+
+
+Use this when you want to start a warehouse manually.
+
+
+
+2. Suspend a Warehouse (Stop It)
+
+ALTER WAREHOUSE SECOND_WH SUSPEND;
+
+
+Meaning:
+
+Running
+    ↓
+Suspend
+    ↓
+Stopped
+
+This saves credits because Snowflake charges only when the warehouse is running.
+
+
+3. Change Warehouse Size
+
+Current size:
+
+X-SMALL
+
+Change to:
+
+ALTER WAREHOUSE SECOND_WH
+SET WAREHOUSE_SIZE = 'SMALL';
+
+Or:
+
+ALTER WAREHOUSE SECOND_WH
+SET WAREHOUSE_SIZE = 'MEDIUM';
+
+Larger size = More compute power = More cost.
+
+
+4. Change Auto Suspend Time
+
+Current:
+
+300 seconds = 5 minutes
+
+Change to:
+
+ALTER WAREHOUSE SECOND_WH
+SET AUTO_SUSPEND = 60;
+
+Now:
+
+1 minute idle
+      ↓
+Automatically suspended
+
+
+
+5.View Warehouse Details
+
+SHOW WAREHOUSES;
+
+This shows:
+
+Warehouse Name
+Size
+State
+Clusters
+Auto Suspend
+Owner
+
+
+# Delete a Warehouse
+
+
+DROP WAREHOUSE SECOND_WH;
+
+
+Meaning:
+
+Warehouse Exists
+       ↓
+DROP
+       ↓
+Warehouse Deleted
+
+
+After deleting:
+
+SHOW WAREHOUSES;
+
+You won't see SECOND_WH
+
+
+#  Multi-Cluster Warehouses and Scaling Policies in Snowflake:-
+
+
+Multi-Cluster Warehouse
+
+Instead of:
+
+1 Warehouse
+
+Snowflake creates:
+
+Warehouse 1
+Warehouse 2
+Warehouse 3
+
+Now queries are distributed.
+
+100 Queries
+    ↓
+WH1 → 33 Queries
+WH2 → 33 Queries
+WH3 → 34 Queries
+
+Less waiting.
+
+Very Important
+
+Multi-cluster is for:
+
+✅ More users
+
+✅ More simultaneous queries
+
+✅ BI Dashboards
+
+❌ Not for making one query faster
+
+
+
+# Standard Scaling Policy
+
+Default policy.
+
+SCALING_POLICY = 'STANDARD'
+
+Behavior:
+
+New Query Arrives
+↓
+Need More Compute?
+↓
+Immediately Start New Cluster
+
+Priority:
+
+Performance First
+Cost Second
+
+Example:
+
+9:00 AM → Heavy workload
+9:01 AM → New cluster started
+
+Users experience less waiting.
+
+
+
+# Economy Scaling Policy
+
+SCALING_POLICY = 'ECONOMY'
+
+Behavior:
+
+New Queries Arrive
+↓
+Snowflake Waits
+↓
+Checks if load continues
+↓
+Then starts new cluster
+
+Priority:
+
+Cost First
+Performance Second
+
+
+Example
+
+Heavy workload starts:
+
+9:00 AM
+
+Standard Policy:
+
+9:01 AM
+New Cluster Started
+
+Economy Policy:
+
+9:01 AM
+Wait
+
+9:02 AM
+Wait
+
+9:03 AM
+Wait
+
+If workload continues,
+start cluster
+
+So fewer credits are consumed.
+
+
+Standard vs Economy
+
+Feature	                           Standard	       Economy
+
+Starts new cluster quickly	     ✅	                 ❌
+Best performance	             ✅	                 ❌
+Saves credits	                     ❌      	         ✅
+Default policy	                     ✅	                 ❌
+Good for dashboards	             ✅	             Sometimes
+
+
+
+# Hierarchy of data objects in Snowflake and how to create them-
+
+
+Snowflake Structure
+
+Think of it like folders on your computer:
+
+Database
+   ↓
+Schema
+   ↓
+Table
+   ↓
+Rows & Columns (Data)
+
+Database = Main container
+Schema = Sub-folder inside database
+Table = Stores actual data
+
+
+1. Create a Database
+
+CREATE DATABASE FIRST_DB;
+
+Use it:
+
+USE DATABASE FIRST_DB;
+
+Check databases:
+
+SHOW DATABASES;
+
+
+2. Create a Schema
+
+Inside the database:
+
+CREATE SCHEMA FIRST_SCHEMA;
+
+Use it:
+
+USE SCHEMA FIRST_SCHEMA;
+
+Check schemas:
+
+SHOW SCHEMAS;
+
+
+3. Create a Table
+
+CREATE TABLE EMPLOYEES (
+    EMP_ID INTEGER,
+    EMP_NAME STRING,
+    DEPARTMENT STRING,
+    SALARY NUMBER(10,2),
+    JOIN_DATE DATE
+);
+
+Check tables:
+
+SHOW TABLES;
+
+View Table Structure
+DESC TABLE EMPLOYEES;
+
+Output:
+
+EMP_ID        INTEGER
+EMP_NAME      STRING
+DEPARTMENT    STRING
+SALARY        NUMBER
+JOIN_DATE     DATE
+
+
+5. Insert Data
+
+INSERT INTO EMPLOYEES
+
+VALUES
+(101,'Rahul','IT',50000,'2024-01-15'),
+(102,'Priya','HR',45000,'2024-02-20'),
+(103,'Arjun','Finance',60000,'2024-03-10');
+
+
+6. View Data
+SELECT * FROM EMPLOYEES;
+
+
+7. Add a New Column
+
+ALTER TABLE EMPLOYEES
+ADD COLUMN EMAIL STRING;
+
+Check:
+DESC TABLE EMPLOYEES;
+
+8. Delete a Table
+DROP TABLE EMPLOYEES;
+
+9. Delete a Schema
+DROP SCHEMA FIRST_SCHEMA;
+
+10. Delete a Database
+DROP DATABASE FIRST_DB;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# What is a Data Warehouse?
+
+A Data Warehouse is a central place where data from different sources is collected, cleaned, organized, and stored for reporting, analytics, dashboards, and business decisions.
+
+Example
+
+Suppose a company has:
+
+HR Database → Employee data
+Sales Database → Sales transactions
+Finance Database → Expenses and revenue
+CSV Files → Customer feedback
+
+Instead of analyzing each source separately, all data is brought into a Data Warehouse (Snowflake).
+
+ETL Process:-
+
+1. Extract (E)
+
+Take data from source systems.
+
+HR Database  → Employee Data
+Sales DB     → Sales Data
+CSV Files    → Customer Data
+
+
+2. Transform (T)
+
+Clean and prepare data.
+
+Examples:
+
+Rahul   → RAHUL
+50000.0 → 50000
+Remove duplicate records
+Fix missing values
+
+
+3. Load (L)
+
+Load the cleaned data into Snowflake tables.
+
+EMPLOYEES
+SALES
+CUSTOMERS
+
+Data Warehouse Layers
+
+Layer 1: Raw Layer (Staging Area)
+
+Data is copied exactly as received.
+
+RAW_EMPLOYEES
+RAW_SALES
+RAW_CUSTOMERS
+
+No cleaning yet.
+
+Layer 2: Integration Layer
+
+Data is cleaned and transformed.
+
+RAW_EMPLOYEES
+      ↓
+Cleaned Employees
+
+RAW_SALES
+      ↓
+Cleaned Sales
+
+Relationships are created here.
+
+Layer 3: Access Layer
+
+Final business-ready tables.
+
+EMPLOYEE_REPORT
+SALES_REPORT
+CUSTOMER_REPORT
+
+
+
+Tools like Power BI connect here.
+
+Source Systems
+      ↓
+ETL Process
+      ↓
+Snowflake
+      ↓
+Power BI / Tableau / Reports
+
+
+
+
+# Cloud Computing & Snowflake:-
+
+Before Cloud Computing
+
+Companies had to build and maintain their own data centers.
+
+
+They had to manage:
+
+Physical servers
+Storage devices
+Networking equipment
+Security
+Power supply
+Cooling systems
+Hardware upgrades
+Software updates
+
+This required:
+
+High cost 💰
+IT staff 👨‍💻
+Maintenance effort 🔧
+Security management 🔒
+
+
+What is Cloud Computing?
+
+Instead of buying and maintaining servers, companies rent computing resources over the internet.
+
+Examples:
+
+Amazon Web Services (AWS)
+Microsoft Azure
+Google Cloud
+
+These providers manage:
+
+✅ Servers
+✅ Storage
+✅ Networking
+✅ Security infrastructure
+
+Companies simply use the services they need.
+
+
+What is SaaS?
+
+SaaS = Software as a Service
+
+Instead of installing software on your own servers, you use it through the internet.
+
+Examples:
+
+Snowflake
+Salesforce
+Google Workspace
+
+
+How Snowflake Fits In
+
+Snowflake is a SaaS Data Warehouse.
+
+You focus on:
+
+Creating databases
+Creating schemas
+Creating tables
+Loading data
+Running SQL queries
+Building reports
+
+Snowflake handles:
+
+Infrastructure
+Storage management
+Metadata
+Performance optimization
+Security features
+
+Real Example
+
+Without Snowflake:
+
+Buy servers
+Install database software
+Configure storage
+Manage backups
+Handle upgrades
+Maintain security
+
+With Snowflake:
+
+CREATE DATABASE COMPANY_DB;
+
+CREATE TABLE EMPLOYEES (
+    EMP_ID INT,
+    EMP_NAME STRING,
+    SALARY NUMBER(10,2)
+);
+
+
+
+
+
+POPULAR ALTERNATIVES TO SNOWFLAKE-
+
+1)Snowflake
+2)google bigquery
+3)amazon redshift
+4)azure synapse analytics 
+5)databricks
+6)teredata vantage 
+7)oracle autonomous data warehouse 
+
+
+
+
+# Snowflake Editions-
+
+
+Think of Snowflake editions like mobile plans:
+
+Standard
+
+beginners,small companies 
+basic snowflake features
+
+enterprise 
+
+large companies
+multi-cluster warehouses,90-day time travel 
+
+business critical 
+sensitive data(banking,healthcare)
+extra security and compliance 
+
+virtual private snowflake(vps)
+government,highly regulated organizations
+dedicated infrastructure 
+
+
+1. Standard Edition
+
+This is the basic edition.
+
+Features:
+
+Data encryption
+Structured, semi-structured, and unstructured data support
+Time Travel up to 1 day
+Fail-safe (7 days)
+Secure Data Sharing
+SSO (Single Sign-On)
+
+Example:
+
+Startup company
+Student projects
+Small business analytics
+
+
+2. Enterprise Edition
+
+Everything in Standard +
+
+Multi-Cluster Warehouses
+
+Automatically adds clusters when many users run queries simultaneously.
+
+Example:
+
+100 analysts running dashboards at the same time.
+Time Travel = 90 Days
+
+Instead of:
+
+Yesterday
+
+You can recover data from:
+
+90 days ago
+Additional Features
+Materialized Views
+Search Optimization
+Column-Level Security
+
+Example:
+
+Employee	Salary
+Rahul	         50000
+
+HR can see salary.
+
+Sales team cannot see salary.
+
+
+3. Business Critical Edition
+
+Everything in Enterprise +
+
+Extra security.
+
+Used by:
+
+Banks
+Hospitals
+Financial companies
+
+Features:
+
+Customer-managed encryption keys
+Regulatory compliance
+Database failover/failback
+Advanced security controls
+
+
+4. Virtual Private Snowflake (Highest Edition)
+
+Everything in Business Critical +
+
+Dedicated infrastructure.
+
+Normal Snowflake: Server shared with other customers
+
+Virtual Private Snowflake: Dedicated servers only for your company
+
+Used by:
+
+Governments
+Defense organizations
+Highly regulated financial institutions
+
+
+
+Time Travel Retention
+
+Edition	               Time Travel
+
+Standard	        1 Day
+Enterprise	        90 Days
+Business Critical	90 Days
+Virtual Private	        90 Days
+
+
+
+
+
+# Snowflake Pricing-
+
+
+
+Snowflake charges mainly for 2 things:
+
+
+Snowflake Cost
+   │
+   ├── Compute Cost 💻
+   └── Storage Cost 💾
+
+
+
+1. Compute Cost (Major Cost)
+
+Compute means the processing power used to run queries.
+
+Example:
+
+SELECT * FROM EMPLOYEES;
+
+To execute this query, Snowflake uses a Warehouse.
+
+You pay only when the warehouse is running.
+
+
+Compute Cost Depends On
+
+
+A. Warehouse Size
+
+Warehouse Size	   Credits / Hour
+X-Small          	1
+Small	                2
+Medium	                4
+Large	                8
+X-Large	               16
+
+Notice:
+
+X-Small = 1 credit
+Small   = 2 credits
+Medium  = 4 credits
+Large   = 8 credits
+
+Every size doubles the compute power and doubles the credits.
+
+
+
+B. Running Time
+
+Suppose:
+
+Warehouse = Small
+Credits/hr = 2
+
+If it runs for:
+
+30 minutes
+
+Then:
+
+2 × (30/60)
+
+= 1 credit
+
+So Snowflake bills per second (after a minimum of 1 minute).
+
+
+
+Example
+
+Warehouse:
+
+SMALL
+
+Runs for:
+
+15 minutes
+
+Calculation:
+
+2 credits × (15/60)
+
+= 0.5 credits
+
+
+
+Auto Suspend Saves Money
+
+Example:
+
+ALTER WAREHOUSE MY_WH
+SET AUTO_SUSPEND = 60;
+
+Meaning:
+
+No query for 60 seconds
+       ↓
+Warehouse automatically stops
+       ↓
+No compute charges
+
+
+This is why Auto Suspend is important.
+
+
+
+2. Storage Cost
+
+This is the cost of storing data.
+
+Example:
+
+employees.csv
+sales.csv
+customer_data.csv
+
+stored inside Snowflake.
+
+You pay based on:
+
+Total GB/TB stored
+
+Example:
+
+100 GB data
+
+Storage cost is usually much lower than compute cost.
+
+
+
+Cloud Services Cost
+
+Snowflake also performs:
+
+Metadata management
+Query optimization
+Authentication
+Access control
+
+These belong to the Cloud Services Layer.
+
+Normally:
+
+Cloud Service Cost
+≤ 10% of warehouse usage
+
+Snowflake usually does not charge separately.
+
+
+Serverless Compute
+
+Used by features like:
+
+Snowpipe
+Search Optimization
+Automatic Clustering
+
+Example:
+
+New CSV file arrives
+      ↓
+Snowpipe automatically loads it
+      ↓
+Snowflake provides compute automatically
+
+
+No warehouse management needed.
+
+
+#  Snowflake Pricing-
+
+
+Snowflake charges for 3 things:
+
+Compute Cost (Warehouses)
+Storage Cost (Data stored)
+Data Transfer Cost (Moving data out)
+
+1. Compute Cost
+
+This is the main cost.
+
+Whenever you run queries, Snowflake uses a warehouse.
+
+Example:
+
+SELECT * FROM EMPLOYEES;
+
+If your warehouse is running:
+
+XS Warehouse
+1 hour running= 1 credit
+
+If the warehouse runs for only 30 minutes= 0.5 credit
+
+Larger warehouses consume more credits.
+
+Warehouse	Credits/Hour
+XS	             1
+S	             2
+M	             4
+L	             8
+
+
+2. Storage Cost
+
+Snowflake stores your data in cloud storage (AWS/Azure/GCP).
+
+Example:
+
+EMPLOYEES table
+CUSTOMERS table
+SALES table
+
+All these tables occupy storage.
+
+Suppose:
+
+Total Data = 1 TB
+
+Storage cost might be:
+
+$40 per TB per month
+
+(Actual price depends on region and cloud provider.)
+
+
+Important
+
+Snowflake compresses data.
+
+Example:
+
+Original CSV = 100 GB
+After Compression = 40 GB
+
+You pay only for:
+
+40 GB not 100 GB
+
+
+3. Data Transfer Cost
+
+Data In (Ingress)
+
+Uploading data into Snowflake:
+
+Laptop → Snowflake
+AWS S3 → Snowflake
+CSV → Snowflake
+
+✅ FREE
+
+
+Data Out (Egress)
+
+Moving data out of Snowflake:
+
+Snowflake → Another Cloud
+Snowflake → Another Region
+Snowflake → Another Snowflake Account
+
+❌ Charged
+
+
+Example
+
+Free
+AWS US-East Snowflake
+        ↓
+AWS US-East Snowflake
+
+Same cloud + same region
+
+No charge
+
+
+Charged
+
+AWS US-East
+        ↓
+AWS Frankfurt
+
+Different region
+
+Transfer cost applies
+
+
+Charged More
+
+        AWS
+         ↓
+       Azure
+
+Different cloud providers
+
+Higher transfer cost
+
+
+
+
+# Snowflake cost monitoring:-
+
+- How to check where your Snowflake money (credits) is being spent.
+
+Step 1: Open Cost Management
+
+In Snowflake:
+
+Admin
+  ↓
+Cost Management
+
+You must be using:
+
+ACCOUNTADMIN
+
+role, otherwise you may not see the cost details.
+
+
+Step 2: Account Overview
+
+You'll see something like:
+
+    Metric	             Meaning
+Credits Used	   Total credits consumed
+Cost	           Total money spent
+Top Warehouse   Warehouses using most credits
+Storage Cost	   Data storage charges
+
+Example:
+
+Credits Used = 10
+Price per Credit = $3
+
+Total Cost = $30
+
+
+Step 3: Compute Costs
+
+This is usually the biggest expense.
+
+Select:
+
+Consumption
+  ↓
+Compute
+
+You can see which warehouse consumed credits.
+
+Example:
+
+Warehouse	Credits Used
+WH_XS	            5
+WH_DEV	            3
+WH_TEST	            2
+
+Total:
+
+10 credits
+
+This helps identify expensive warehouses.
+
+
+Step 4: Storage Costs
+
+Select:
+
+Consumption
+  ↓
+Storage
+
+Example:
+
+Database	Storage
+
+COMPANY_DB	5 GB
+SALES_DB	10 GB
+
+Snowflake shows how much storage is being used.
+
+
+Step 5: Data Transfer Costs
+
+Select:
+
+Consumption
+  ↓
+Data Transfer
+
+Remember:
+
+Uploading data to Snowflake = Free
+
+Downloading or moving data out = Charged
+
+You can see those charges here.
+
+
+
+Step 6: What is Warehouse Metering?
+
+The instructor mentioned:
+
+  Warehouse Metering
+
+This simply means:
+
+  Credit consumption by warehouses
+
+Example:
+
+WH_XS ran for 1 hour
+
+Credits used: 1 credit
+
+Snowflake records this under:
+
+  Warehouse Metering
+
+
+Step 7: What are Tags?
+
+Tags are labels used for tracking costs.
+
+Example:
+
+Department = HR
+Department = IT
+Department = Finance
+
+or
+
+Environment = DEV
+Environment = TEST
+Environment = PROD
+
+You can then check:
+
+How much did DEV spend?
+How much did PROD spend?
+
+Very useful in large companies.
+
+
+# SNOWFLAKE ROLES AND ACCESS CONTROL:-
+
+What is a Role?
+
+A Role is a collection of permissions (privileges).
+
+Instead of giving permissions directly to users:
+
+❌ User → Permission
+
+Snowflake uses:
+
+✅ User → Role → Permission
+
+Example:
+
+Role = HR_MANAGER
+Permission = View Employee Table
+
+If a user gets the HR_MANAGER role, they automatically get access to the Employee table.
+
+How Roles Work:- 
+
+Privileges
+    ↓
+   Role
+    ↓
+   User
+
+Example:
+
+
+GRANT SELECT ON TABLE EMPLOYEES TO ROLE HR_ROLE;
+
+GRANT ROLE HR_ROLE TO USER ROOHI;
+
+
+Now Roohi can view the EMPLOYEES table.
+
+
+Snowflake System Roles Hierarchy
+
+ACCOUNTADMIN
+      ↑
+SECURITYADMIN
+      ↑
+USERADMIN
+      ↑
+SYSADMIN
+      ↑
+PUBLIC
+
+Privileges move upward.
+
+If SYSADMIN has access:
+
+SYSADMIN ✔
+SECURITYADMIN ✔
+ACCOUNTADMIN ✔
+
+Because higher roles inherit lower-role permissions.
+
+
+PUBLIC Role
+
+Lowest role.
+
+Every user automatically gets PUBLIC.
+
+ Example:
+
+User Created
+     ↓
+PUBLIC Role Automatically Assigned
+
+
+Think of it as:
+
+Guest Access
+
+
+USERADMIN
+
+Purpose:
+
+✅ Create Users
+
+✅ Create Roles
+
+Example:
+
+CREATE USER EMP1;
+CREATE ROLE HR_ROLE;
+
+USERADMIN manages users.
+
+
+SECURITYADMIN
+
+Purpose:
+
+✅ Grant Permissions
+
+✅ Revoke Permissions
+
+
+Example: GRANT SELECT ON TABLE EMPLOYEES TO ROLE HR_ROLE;
+
+SECURITYADMIN controls who gets access to what.
+
+Think:
+
+Security Guard
+
+
+SYSADMIN
+
+Most commonly used role.
+
+Purpose:
+
+✅ Create Databases
+
+✅ Create Schemas
+
+✅ Create Tables
+
+✅ Create Warehouses
+
+Example:
+
+CREATE DATABASE COMPANY_DB;
+
+CREATE TABLE EMPLOYEES(
+EMP_ID INT,
+EMP_NAME STRING
+);
+
+Think:Database Administrator
+
+
+ ACCOUNTADMIN
+
+Most powerful role.
+
+Contains:
+
+SYSADMIN +SECURITYADMIN +USERADMIN
+
+Can do everything.
+
+Example:USE ROLE ACCOUNTADMIN;
+
+Usually only senior admins use this role.
+
+
+ORGADMIN
+
+Used when an organization has multiple Snowflake accounts.
+
+Example:
+
+Company
+ ├── Snowflake Account 1
+ ├── Snowflake Account 2
+ └── Snowflake Account 3
+
+ORGADMIN manages all accounts.
+
+
+ Why Custom Roles Should Be Assigned to SYSADMIN
+
+Suppose you create:
+
+   CREATE ROLE DATA_ANALYST;
+
+Best Practice:
+
+   GRANT ROLE DATA_ANALYST TO ROLE SYSADMIN;
+
+Why?
+
+Because SYSADMIN manages:
+
+Databases
+Warehouses
+Tables
+Schemas
+
+This avoids permission conflicts.
+
+
+# DATA LOADING-
+
+Before analyzing data, Snowflake must receive data from:
+
+CSV files
+Excel files
+Databases
+APIs
+Cloud storage (AWS S3, Azure Blob, GCP)
+
+CSV File
+    ↓
+Snowflake Table
+    ↓
+SQL Queries
+    ↓
+Reports / Analytics
+
+
+Two Ways to Load Data in Snowflake:-
+
+1. Bulk Loading (Most Common)
+
+Loads a large amount of data at once.
+
+Example:
+
+Employee_Data.csv
+(1 Million Records)
+       ↓
+Load all records together
+       ↓
+Snowflake Table
+
+Uses:
+
+✅ Your Warehouse
+
+✅ COPY INTO command
+
+✅ Stages
+
+
+2. Continuous Loading
+
+Loads data automatically whenever new data arrives.
+
+Example:
+
+Website Orders
+      ↓
+New Order Every Second
+      ↓
+Automatically Loaded
+      ↓
+Snowflake
+
+Uses:
+
+✅ Snowpipe
+
+✅ Serverless Compute
+
+❌ Does NOT use your warehouse
+
+Difference;
+
+Feature  	          Bulk Loading	             Continuous Loading
+
+Data Volume	         Large	                      Small/Frequent
+Compute Used	         Your Warehouse	              Snowflake Serverless
+Command	                 COPY INTO	              Snowpipe
+Speed	                 Periodic	              Near Real-Time
+Common Use	         CSV Uploads	              Live Data Streams
+
+
+What is a Stage?
+
+This is the next topic in your course.
+
+A Stage is a temporary storage location where files are kept before loading into a table.
+
+Think of it like a waiting room.
+
+CSV File
+    ↓
+Stage
+    ↓
+COPY INTO
+    ↓
+Table
+
+
+Example:
+
+employees.csv
+       ↓
+@MY_STAGE
+       ↓
+EMPLOYEES Table
+
+
+complete flow:-
+
+Step 1:
+Create Table
+
+       ↓
+
+Step 2:
+Create Stage
+
+       ↓
+
+Step 3:
+Upload CSV File
+
+       ↓
+
+Step 4:
+Run COPY INTO
+
+       ↓
+
+Step 5:
+Verify Data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
