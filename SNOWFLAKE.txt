@@ -1177,6 +1177,56 @@ DROP SCHEMA FIRST_SCHEMA;
 10. Delete a Database
 DROP DATABASE FIRST_DB;
 
+# Stages in Snowflake
+
+What is a Stage?
+
+A Stage is a Snowflake object that stores the location of files before loading them into a table.
+
+Think of it as a parking area for files.
+
+CSV File
+   ↓
+ Stage
+   ↓
+COPY INTO
+   ↓
+Table
+
+Example:
+
+employees.csv
+      ↓
+@MY_STAGE
+      ↓
+EMPLOYEES Table
+
+-Why Do We Need a Stage?
+
+Without a stage:
+
+CSV File
+   ↓
+Table
+
+Snowflake cannot directly manage the file easily.
+
+So Snowflake uses:
+
+CSV File
+   ↓
+Stage
+   ↓
+Table
+
+The stage tells Snowflake:
+
+Where the file is located
+How to access it
+What credentials are needed
+
+
+
 
 
 
