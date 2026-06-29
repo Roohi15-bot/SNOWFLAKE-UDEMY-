@@ -2353,6 +2353,1553 @@ Step 5:
 Verify Data
 
 
+# STAGE IN SNOWFLAKE :-
+
+A Stage is a Snowflake object that stores the location of files before loading them into a table.
+
+Think of it as a parking area for files.
+
+CSV File
+   ↓
+ Stage
+   ↓
+COPY INTO
+   ↓
+Table
+
+Example:
+
+employees.csv
+      ↓
+@MY_STAGE
+      ↓
+EMPLOYEES Table
+
+Why Do We Need a Stage?
+
+Without a stage:
+
+CSV File
+   ↓
+Table
+
+Snowflake cannot directly manage the file easily.
+
+So Snowflake uses:
+
+CSV File
+   ↓
+Stage
+   ↓
+Table
+
+The stage tells Snowflake:
+
+Where the file is located
+How to access it
+What credentials are needed
+
+Types of Stages;
+
+1. External Stage (Most Common)- File is stored outside Snowflake.
+
+Examples:
+
+AWS S3 Bucket
+Azure Blob Storage
+Google Cloud Storage
+
+AWS S3
+   ↓
+External Stage
+   ↓
+Snowflake Table
+
+Create:
+
+CREATE STAGE MY_STAGE
+URL='s3://mybucket/data/';
+
+2. Internal Stage- File is stored inside Snowflake.
+
+Example:
+
+Laptop CSV
+    ↓
+Upload to Snowflake Stage
+    ↓
+Table
+
+Create:
+
+CREATE STAGE MY_STAGE;
+
+Then upload:
+
+PUT file://C:/employees.csv @MY_STAGE;
+
+Stage is a Database Object-
+Just like:
+
+CREATE DATABASE COMPANY_DB;
+CREATE TABLE EMPLOYEES;
+CREATE STAGE MY_STAGE;
+
+A stage is also an object stored in a schema.
+
+DATABASE
+   ↓
+SCHEMA
+   ↓
+TABLES
+STAGES
+VIEWS
+
+Internal vs External Stage- 
+
+Internal Stage	               External Stage
+
+Stored in Snowflake	         Stored in AWS/Azure/GCP
+Upload using PUT	         Already exists in cloud
+Easy for beginners	         Used in companies
+Small projects	             Production projects
+
+# Why Do We Need a Stage?
+
+Most important ones in Snowflake because it explains how Snowflake knows where your files are stored before loading them.
+
+First, Why Do We Need a Stage?
+
+Suppose you have a CSV file.
+
+employees.csv
+
+It is stored somewhere.
+
+Maybe in
+
+AWS S3
+Azure Blob Storage
+Google Cloud Storage
+or inside Snowflake itself.
+
+Snowflake cannot magically know where your file is.
+
+So you first create a Stage.
+
+A Stage is simply an address (location) that tells Snowflake where your files are.
+
+Think of it like this:
+
+Your House
+     ↓
+Google Maps needs your address
+
+Snowflake
+     ↓
+Needs Stage (address)
+
+Without an address, nobody can find your house.
+
+Without a stage, Snowflake cannot find your CSV file.
+
+Real Flow;
+
+CSV File
+      │
+      ▼
+AWS S3 Bucket
+      │
+      ▼
+Stage (stores location)
+      │
+      ▼
+COPY INTO
+      │
+      ▼
+Snowflake Table
+
+What happens in this lecture?
+
+The instructor creates
+Database
+↓
+Schema
+↓
+Stage
+Let's understand every step.
+
+Step 1- Create a database
+
+CREATE DATABASE MANAGE_DB;
+   -Creates a database.
+Think- MANAGE_DB as Folder
+
+Step 2- Create a schema
+
+CREATE SCHEMA EXTERNAL_STAGES;
+
+Now
+
+MANAGE_DB
+
+contains
+
+EXTERNAL_STAGES
+
+Like
+
+MANAGE_DB
+    |
+    |--EXTERNAL_STAGES
+
+Why create this schema?
+
+Instead of keeping everything mixed,companies organize objects.
+
+Example
+
+MANAGE_DB
+Tables
+Stages
+File Formats
+Pipes
+
+Step 3- Create the stage
+
+CREATE STAGE aws_stage
+URL='s3://mybucket/files/';
+
+What happens?
+Nothing is copied.
+
+Snowflake simply remembers
+
+"Whenever someone uses aws_stage, go to this S3 folder."
+
+Think of it like saving a shortcut.
+
+Windows Shortcut-
+
+Shortcut
+     ↓
+Documents Folder
+
+Snowflake Stage-
+
+aws_stage
+     ↓
+AWS S3 Folder
+
+What information does a Stage store?
+
+A stage stores properties.
+
+Example
+
+Stage
+↓
+Location
+↓
+s3://company-data/sales/
+
+It may also store
+
+AWS credentials
+File format
+Region
+Encryption
+Compression
+
+So a stage is much more than only a folder name.
+
+Example
+
+Suppose your company stores
+
+employees.csv
+
+inside
+
+AWS S3
+
+company-files
+     |
+employees.csv
+
+You create
+
+CREATE STAGE employee_stage
+URL='s3://company-files/';
+
+Now Snowflake knows
+
+employee_stage
+    ↓
+  AWS S3
+    ↓
+employees.csv
+
+Step 4- Describe Stage
+
+DESC STAGE employee_stage;
+
+This does NOT load data.
+
+It only shows information.
+
+Example output
+
+URL- File Format- Credentials- Compression- Delimiter- Encoding
+
+Think of it as
+Checking the stage settings.
+
+Step 5-Alter Stage
+
+Suppose your company moves files.
+
+Old-s3://old-company-data/
+
+New-s3://new-company-data/
+
+Instead of creating another stage,
+
+simply change it.
+
+ALTER STAGE employee_stage
+SET URL='s3://new-company-data/';
+
+Now the stage points to the new location.
+
+Step 6-List Files
+
+LIST @employee_stage;
+
+Notice the @ symbol.
+
+The @ tells Snowflake:
+
+"This is a stage."
+
+If your stage contains
+
+employees.csv
+
+sales.csv
+
+customers.csv
+
+Snowflake shows
+
+employees.csv
+
+sales.csv
+
+customers.csv
+
+No data is loaded yet.
+
+It only lists the files.
+
+Why @ ?
+
+Whenever Snowflake sees @ it understands Use a Stage
+
+Example
+
+@employee_stage
+
+means
+
+Look inside this stage.
+
+- After Listing Files
+
+Now Snowflake knows
+
+Where the files are
+
+The next command loads them.
+
+COPY INTO employees
+FROM @employee_stage;
+
+Flow becomes
+
+AWS S3
+     │
+     ▼
+Stage
+     │
+     ▼
+COPY INTO
+     │
+     ▼
+Snowflake Table
+
+Why use CREATE OR REPLACE?
+
+Instead of
+
+CREATE STAGE
+
+the instructor used
+
+CREATE OR REPLACE STAGE
+
+Meaning
+
+If the stage already exists
+     ↓
+ Delete it
+     ↓
+Create it again.
+
+Very useful while practicing.
+
+- Why did the instructor say credentials are not recommended?
+
+He showed
+
+AWS Key
+AWS Secret Key
+
+inside the stage.
+
+Old approach;
+
+Stage
+↓
+AWS Key
+↓
+AWS Secret
+
+Modern and more secure approach;
+
+Storage Integration
+↓
+Stage
+↓
+S3
+
+Companies prefer Storage Integration because credentials are managed securely rather than stored directly in the stage.
+
+Complete picture;
+
+Laptop
+    │
+employees.csv
+    │
+    ▼
+Upload to AWS S3
+    │
+    ▼
+Create Stage
+    │
+    ▼
+LIST @stage
+    │
+    ▼
+See files
+    │
+    ▼
+COPY INTO table
+    │
+    ▼
+Snowflake Table
+
+# Data Loading :-
+
+This lecture is the heart of Snowflake Data Loading. Once you understand this lecture, you'll understand how companies actually connect Snowflake to AWS S3 and load data.
+
+Big Picture ;
+
+Imagine your company has a CSV file.
+
+employees.csv
+
+Where is it?
+
+AWS S3
+     │
+employees.csv
+
+Your goal is to load this file into Snowflake.
+
+Snowflake doesn't know where the file is.
+
+So first we create something called a Stage.
+
+Complete Process - 
+
+Step 1
+Create Database
+        │
+        ▼
+Step 2
+Create Schema
+        │
+        ▼
+Step 3
+Create Stage
+        │
+        ▼
+Stage points to AWS S3
+        │
+        ▼
+Step 4
+Describe Stage
+        │
+        ▼
+Check Stage Properties
+        │
+        ▼
+Step 5
+List Files
+        │
+        ▼
+employees.csv
+sales.csv
+customers.csv
+        │
+        ▼
+Step 6 (Next Lecture)
+COPY INTO Table
+
+Step 1 — Create Database
+
+CREATE DATABASE MANAGE_DB;
+Why?
+The instructor creates a separate database only for administrative objects.
+
+Administrative objects include:
+
+Stages
+File Formats
+Pipes
+Storage Integrations
+
+Instead of mixing them with business tables.
+
+Think of it like this.
+
+Laptop
+
+Documents
+Pictures
+Downloads
+
+Similarly,
+
+Snowflake
+
+COMPANY_DB
+MANAGE_DB
+
+MANAGE_DB is only for administration.
+
+- Why MANAGE_DB?
+
+Imagine your company has
+
+500 Tables
+30 Stages
+20 File Formats
+
+If everything is inside one database...
+
+Everything Mixed
+
+Finding objects becomes difficult.
+
+Instead
+
+MANAGE_DB-mStages- File Formats - Pipes
+Much cleaner.
+This is called Best Practice.
+
+- Step 2 — Create Schema
+CREATE SCHEMA EXTERNAL_STAGES;
+
+Now your structure becomes
+
+MANAGE_DB
+
+     │
+     ├── PUBLIC
+
+     └── EXTERNAL_STAGES
+
+Schemas are simply folders inside a database.
+
+- Why another schema?
+
+Because companies organize everything.
+
+Example
+
+MANAGE_DB
+
+     STAGES
+
+     FILE_FORMATS
+
+     PIPES
+
+     INTEGRATIONS
+
+Instead of dumping everything inside PUBLIC.
+
+Step 3 — Create Stage
+
+Now comes the important part.
+
+CREATE STAGE aws_stage
+URL='s3://company-data/';
+
+Question:
+
+What happened?
+
+Did Snowflake copy the data?
+
+❌ No.
+
+Did Snowflake create the CSV?
+
+❌ No.
+
+Did Snowflake download anything?
+
+❌ No.
+
+It simply remembers
+
+"Whenever someone uses aws_stage, go to this S3 bucket."
+
+That's all.
+
+What does a Stage contain?
+
+A stage stores many properties.
+
+Example;
+
+Stage
+↓
+URL
+↓
+s3://company-data/
+
+Also
+
+Credentials
+AWS Key
+AWS Secret
+
+Also
+File Format
+CSV
+JSON
+PARQUET
+
+Also
+Delimiter
+Encoding
+Compression
+
+It stores everything required to read files.
+
+- Why credentials?
+
+Suppose your bucket is private.
+
+AWS S3
+
+employees.csv
+
+Nobody can access it.
+
+Snowflake needs permission.
+
+That permission is;
+
+AWS Access Key
+
+AWS Secret Key
+
+The instructor stored them inside the Stage.
+
+Today companies don't do that.
+
+Instead they use- Storage Integration (because it's more secure)
+
+Step 4 — Describe Stage
+
+Command
+
+DESC STAGE aws_stage;
+
+What does it do?
+
+It shows information.
+
+Think of it like
+
+Phone Settings
+
+You open Settings.
+You don't change anything.
+You just look.
+
+Similarly
+DESC STAGE
+   ↓
+Show Settings
+
+Output may contain
+
+URL
+AWS Region
+Encoding
+Compression
+Delimiter
+Credentials
+File Format
+
+Nothing is loaded.
+
+What are Properties?
+
+Think of a Car;
+
+Car
+Color
+Engine
+Fuel
+Brand
+Mileage
+     These are properties.
+
+Similarly;
+Stage
+URL
+Encoding
+Delimiter
+Compression
+Credentials
+      These are Stage Properties.
+
+# Step 5 — Alter Stage
+
+Suppose your company moves files.
+
+Old location - s3://old-data/
+
+New location- s3://new-data/
+
+Instead of deleting and creating another stage,
+
+simply update it.
+
+ALTER STAGE aws_stage
+SET URL='s3://new-data/';
+
+Now
+
+aws_stage
+  ↓
+new-data
+
+Very easy.
+
+- Why CREATE OR REPLACE?
+
+Instructor used
+
+CREATE OR REPLACE STAGE
+
+instead of
+
+CREATE STAGE
+
+Why?
+
+Suppose
+
+aws_stage
+
+already exists.
+
+Then
+
+CREATE STAGE
+
+gives
+
+Error
+
+Stage already exists
+
+But
+
+CREATE OR REPLACE STAGE
+
+means
+
+Delete old one
+
+↓
+
+Create new one
+
+Very useful while practicing.
+
+ Public Bucket
+
+The instructor later recreated the stage.
+
+-Why?
+
+Because the S3 bucket was public.
+
+Public means- Anyone can read it.
+
+Like a public Google Drive link.
+
+If everybody can access it,
+
+Snowflake doesn't need AWS credentials.
+
+So he removed them.
+
+- LIST Command
+
+Command
+
+LIST @aws_stage;
+
+Notice
+
+@
+
+Why?
+
+Whenever Snowflake sees
+
+@
+
+it immediately knows this is a Stage.
+
+Example
+
+LIST @aws_stage;
+
+means
+Go inside this stage- Show all files.
+
+Output
+
+employees.csv
+sales.csv
+customers.csv
+
+Why @ ?
+
+Think of it like
+
+# → Hashtag
+@ → Username
+
+Similarly in Snowflake
+
+@ → Stage
+
+Whenever you see - @stage_name
+
+it means - Use this Stage.
+
+- After LIST
+
+Now Snowflake knows
+
+These files exist.
+
+Next lecture
+
+COPY INTO
+
+loads them into a table.
+
+S3
+↓
+Stage
+↓
+LIST
+↓
+COPY INTO
+↓
+Snowflake Table
+
+# COPY_INTO
+
+-Almost every Snowflake developer or data engineer uses it daily.
+
+What is happening in this lecture?
+
+Imagine your company has a CSV file.
+
+orders.csv
+
+You want this data inside a Snowflake table.
+
+The process is:
+
+CSV File
+     ↓
+Stage
+     ↓
+COPY INTO
+     ↓
+Snowflake Table
+
+EXAMPLE - Think of COPY INTO as a truck that moves data.
+
+Warehouse (Compute)
+
+        🚚 COPY INTO
+
+CSV File -------------> Snowflake Table
+
+Complete Process;
+
+- Step 1: Create a Table
+
+First create an empty table.
+
+ORDERS
+
+Like buying an empty cupboard before keeping clothes.
+
+Before
+
+ORDERS
+
+---------------
+|             |
+|             |
+|             |
+---------------
+
+SQL
+
+CREATE TABLE ORDERS(
+ORDER_ID NUMBER,
+PROFIT NUMBER,
+QUANTITY NUMBER,
+CATEGORY STRING,
+AMOUNT NUMBER,
+STATE STRING
+);
+
+Nothing is inside yet.
+
+Step 2: Check the table
+SELECT * FROM ORDERS;
+
+Output - No rows
+
+Because it is empty.
+
+Step 3: Create Stage
+
+Already done.
+
+Suppose
+
+AWS_STAGE
+
+contains;
+
+loan_payments.csv
+
+orders.csv
+
+sample.csv
+
+So
+
+AWS_STAGE
+
+├── loan_payments.csv
+├── orders.csv
+└── sample.csv
+
+Step 4: Copy Data
+
+Now tell Snowflake
+
+Take data from Stage and put it into my table.
+
+COPY INTO ORDERS
+FROM @AWS_STAGE;
+
+Meaning;
+
+ORDERS Table ⬅ Copy --- AWS_STAGE
+
+But Why Error?
+
+Instructor got
+
+Number of columns in file does not match.
+
+Why?
+
+Because Snowflake tried loading ALL files.
+
+AWS_STAGE
+orders.csv
+loan_payments.csv
+sample.csv
+
+Snowflake thought
+
+"You didn't tell me which file."
+
+So it tried
+
+orders.csv ✔
+loan_payments.csv ❌
+sample.csv ❌
+
+One of those files had only 2 columns.
+
+But your table has 6 columns.
+
+Example
+
+Table
+ID
+NAME
+AGE
+CITY
+SALARY
+DEPARTMENT
+
+Total
+6 Columns
+
+But
+
+loan_payments.csv;
+
+Loan_ID
+Amount
+
+Only - 2 Columns
+
+Impossible to fit.
+Hence error.
+
+Solution
+
+Specify the file.
+
+COPY INTO ORDERS
+FROM @AWS_STAGE
+FILES=('orders.csv');
+
+Now Snowflake knows
+
+Only load
+
+orders.csv
+
+Ignore;
+
+loan_payments.csv
+sample.csv
+
+- Why File Format?
+
+Snowflake also needs to know
+
+How should I read this file?
+
+Example
+
+101,Rahul,IT
+
+Comma separated.
+
+So we tell
+
+FILE_FORMAT=(
+TYPE=CSV
+FIELD_DELIMITER=','
+SKIP_HEADER=1
+)
+
+Meaning
+
+TYPE- CSV
+Delimiter - ,
+Skip Header - EMP_ID,EMP_NAME,DEPARTMENT
+
+This first line is not actual data.
+
+So;
+
+SKIP_HEADER=1
+
+means- Ignore first row.
+
+After Successful Copy
+
+Before
+
+ORDERS
+ -Empty
+
+After
+ -ORDERS
+
+101 Rahul IT
+102 Priya HR
+103 Arjun Finance
+
+Now
+
+SELECT * FROM ORDERS;
+shows all rows.
+
+What is LIST?
+
+Instructor used
+
+LIST @AWS_STAGE;
+
+This command simply asks
+
+"Show me what files are inside this Stage."
+
+Output
+
+orders.csv
+loan_payments.csv
+sample.csv
+
+Exactly like opening a folder on Windows.
+
+AWS_STAGE
+
+📄 orders.csv
+📄 sample.csv
+📄 loan.csv
+
+What is FILES()?
+
+Instead of loading every file
+
+COPY INTO ORDERS
+FROM @AWS_STAGE;
+
+Use
+
+FILES=('orders.csv')
+
+Meaning;
+Load only
+orders.csv
+
+What is PATTERN?
+
+Instead of writing exact filenames,
+you can use a pattern.
+
+Example;
+
+orders_2024.csv
+orders_2025.csv
+orders_jan.csv
+loan.csv
+
+If you write
+
+PATTERN='.*orders.*'
+
+Snowflake loads
+
+✔ orders_2024.csv
+✔ orders_2025.csv
+✔ orders_jan.csv
+
+It ignores
+
+❌ loan.csv
+
+Think of .* as a wildcard meaning "anything can appear here."
+
+q) Why didn't it load the file again?
+
+This is one of Snowflake's smartest features.
+
+Suppose;
+orders.csv
+
+was already loaded yesterday.
+
+Today you accidentally run
+
+COPY INTO ORDERS
+FROM @AWS_STAGE
+FILES=('orders.csv');
+
+again.
+
+Snowflake says
+
+"I've already loaded this file."
+
+So it skips it.
+
+This prevents duplicate records.
+
+Without this feature:
+
+Yesterday
+1000 rows
+
+Run COPY again
+2000 rows ❌
+
+Duplicate data!
+
+Snowflake avoids this automatically by keeping metadata about previously loaded files.
+
+q) Why did dropping the table work?
+
+When the instructor ran:
+
+DROP TABLE ORDERS;
+
+the table and its load history were removed.
+
+Then he recreated it:
+
+CREATE TABLE ORDERS(...);
+
+This is a brand-new table.
+
+Snowflake treats it as if no files have ever been loaded, so:
+
+orders.csv
+
+can be loaded again successfully.
+
+Summary Table;
+
+Command/Concept	                   Simple Meaning
+
+CREATE TABLE	                  Create an empty table to store data
+STAGE	                          Location where files are stored
+LIST @stage	                      Show all files in the stage
+COPY INTO	                      Copy data from a stage into a table
+FILES=('file.csv')	              Load only the specified file
+PATTERN='.*orders.*'	          Load files whose names match the pattern
+FILE_FORMAT	                      Tell Snowflake how to read the file (CSV, delimiter, header, etc.)
+SKIP_HEADER=1	                  Ignore the first row (column names)
+Load history (metadata)	          Prevents the same file from being loaded twice into the same table
+
+Easy way to remember the workflow;
+
+1. Create Table
+        ↓
+2. Create Stage
+        ↓
+3. Check files (LIST)
+        ↓
+4. COPY INTO
+        ↓
+5. Verify using SELECT
+
+This 5-step workflow is the standard process you'll use repeatedly when loading files into Snowflake.
+
+# Transform During COPY;
+
+This lecture is very important because it teaches one of the biggest advantages of Snowflake:
+
+You don't always have to load the data exactly as it is.
+You can modify (transform) the data while loading it into the table.
+
+This is called Transform During COPY.
+
+First understand the normal COPY
+
+Normally we do this:
+
+CSV File
+      │
+      ▼
+COPY INTO
+      │
+      ▼
+Snowflake Table
+
+Example CSV
+
+Order_ID	Amount	Profit	 Category
+101	         500	50	     Furniture
+102	         300   -20	     Technology
+
+After COPY
+
+Table
+
+101 500 50 Furniture
+102 300 -20 Technology
+
+Exactly the same.
+
+But what if we don't want everything?
+
+Suppose the CSV has 100 columns.
+
+You only need:
+Order ID
+Amount
+
+Instead of loading all 100 columns,
+
+you load only 2.
+
+This saves;
+storage
+compute
+time
+
+Method 1 : Load only selected columns
+
+Instead of
+
+COPY INTO ORDERS
+FROM @MY_STAGE;
+
+we write
+
+COPY INTO ORDERS
+FROM
+(
+SELECT
+$1,
+$2
+FROM @MY_STAGE
+);
+
+Here
+
+$1 = First column
+$2 = Second column
+$3 = Third column
+$4 = Fourth column
+...
+
+Suppose CSV
+
+Column No.	 Value
+$1	        Order_ID
+$2	        Amount
+$3	        Profit
+$4	        Quantity
+$5	        Category
+
+Only
+
+$1
+$2
+
+will be copied.
+
+Result
+
+Order_ID	Amount
+101	         500
+102	         300
+
+Everything else is ignored.
+
+Why use $1 instead of column name?
+
+Because Snowflake is reading a CSV file, not a table.
+
+CSV files don't have actual column names.
+
+Snowflake simply counts columns.
+
+Order_ID,Amount,Profit
+↓
+$1
+$2
+$3
+
+Method 2 : Use SQL Functions
+
+Now suppose;
+Profit column contains
+
+50
+-20
+80
+-5
+
+Instead of storing numbers,
+your manager wants
+
+Profitable
+Not Profitable
+
+So while copying,
+
+we transform the values.
+
+CSV
+
+50
+-20
+80
+-5
+
+After COPY
+
+Profitable
+Not Profitable
+Profitable
+Not Profitable
+
+using
+
+CASE
+WHEN Profit<0
+THEN 'Not Profitable'
+ELSE 'Profitable'
+END
+
+Why CAST?
+
+The instructor wrote
+
+CAST($3 AS INT)
+
+Why?
+Because, CSV stores everything as text.
+
+Example
+
+CSV
+
+"50"
+"-20"
+"80"
+
+Snowflake reads them as VARCHAR not numbers.
+
+But comparison
+
+$3 < 0
+
+only works on numbers.
+
+So convert it first.
+
+CAST($3 AS INT)
+
+Now;
+
+50
+-20
+80
+
+becomes integer.
+
+Then;
+CASE
+
+IF value < 0
+Not Profitable
+
+Else
+Profitable
+
+works correctly.
+
+Method 3 : Substring()
+
+Suppose
+
+Category;
+Furniture
+Technology
+Office Supplies
+
+Manager only wants first 5 letters.
+
+Furni
+Techn
+Offic
+
+We use
+
+SUBSTRING($5,1,5)
+
+Meaning
+
+Take column 5
+
+Start from character 1
+
+Take 5 characters
+
+Examples
+
+Furniture
+↓
+Furni
+
+Technology
+↓
+Techn
+
+Office Supplies
+↓
+Offic
+
+Normally;
+
+Stage
+↓
+COPY
+↓
+Table
+
+Now;
+
+Stage
+↓
+SELECT
+(Change data)
+↓
+COPY
+↓
+Table
+
+The SELECT acts like a filter or processor between the stage and the table.
+
+
+
+
+
 
 
 
