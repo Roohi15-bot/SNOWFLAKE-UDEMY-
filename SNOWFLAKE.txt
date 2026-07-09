@@ -3904,6 +3904,7 @@ The SELECT acts like a filter or processor between the stage and the table.
 
 # https://chatgpt.com/share/6a4e3f00-f5b8-83ee-a82a-63b5bb7c848b
 
+# https://chatgpt.com/share/6a4f8351-df24-83ee-9466-9b632fa9ff5f
 
 
 
